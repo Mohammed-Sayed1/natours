@@ -8,7 +8,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
-// const cors = require('cors');
+const cors = require('cors');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -25,8 +25,6 @@ app.enable('trust proxy');
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
-// app.use(cors());
-
 /** MIDDLEWARES:
  * it will excute between any request and response.
  * the route handlers also are middlewares, but only for a single request or route.
@@ -35,6 +33,11 @@ app.set('views', path.join(__dirname, 'views'));
  *  */
 
 //* 1) GLOBAL MIDDLEWARES
+//* Implement CORS
+app.use(cors()); //* cors() adds this header 'Access-Control-Allow-Origin' to * (all incoming requests)
+
+app.options('*', cors())
+
 //* Serving static files
 app.use(express.static(path.join(__dirname, 'public'))); //* this is how to serve static files from a folder not a route.
 
